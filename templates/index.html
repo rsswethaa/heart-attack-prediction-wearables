@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>PulseLens — Wearable Wellness Analytics</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar"><div><span class="brand-mark">PL</span><strong>PulseLens</strong></div><span class="tag">Wearable analytics prototype</span></header>
+  <main>
+    <section class="hero">
+      <div><p class="eyebrow">LONGITUDINAL WELLNESS ANALYTICS</p><h1>Turn wearable signals into an explainable trend view.</h1><p>Explore resting heart rate, HRV, sleep, activity and SpO₂ patterns over time. The system surfaces directional changes and unusual readings without making a diagnosis.</p></div>
+      <div class="notice"><strong>Safety boundary</strong><p>Educational portfolio prototype only. Not a medical device and not for emergency or clinical decisions.</p></div>
+    </section>
+
+    <section class="controls card">
+      <label>Age <input id="age" type="number" value="42" min="18" max="100"></label>
+      <label class="upload">Import CSV <input id="csv" type="file" accept=".csv"></label>
+      <button id="demoBtn">Load demo history</button>
+      <button id="analyseBtn" class="primary">Analyse current series</button>
+    </section>
+
+    <section class="metrics" id="metrics"></section>
+
+    <section class="grid two">
+      <article class="card"><div class="card-head"><h2>Resting heart rate</h2><span id="hrTrend"></span></div><svg id="hrChart" viewBox="0 0 700 230" preserveAspectRatio="none"></svg></article>
+      <article class="card"><div class="card-head"><h2>HRV</h2><span id="hrvTrend"></span></div><svg id="hrvChart" viewBox="0 0 700 230" preserveAspectRatio="none"></svg></article>
+    </section>
+
+    <section class="grid two">
+      <article class="card"><h2>Prototype model comparison</h2><div id="models"></div></article>
+      <article class="card"><h2>Latest score contributions</h2><div id="contrib"></div></article>
+    </section>
+
+    <section class="grid two">
+      <article class="card"><h2>Anomaly watch</h2><div id="anomalies"></div></article>
+      <article class="card"><h2>Daily series</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>RHR</th><th>HRV</th><th>Sleep</th><th>Steps</th><th>SpO₂</th></tr></thead><tbody id="rows"></tbody></table></div></article>
+    </section>
+  </main>
+  <script src="/static/app.js"></script>
+</body>
+</html>
