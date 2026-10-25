@@ -1,0 +1,6 @@
+age,resting_hr,hrv_ms,sleep_hours,steps_per_day,exercise_minutes,label_demo
+29,62,68,7.8,10200,180,low
+47,78,41,6.4,6100,90,moderate
+61,88,28,5.5,3500,30,elevated
+38,70,55,7.0,8200,150,low
+55,81,35,6.0,5000,60,moderate
