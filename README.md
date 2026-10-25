@@ -1,22 +1,30 @@
 # Heart Attack Prediction Using Smartwatch Wearables
 
-An educational machine-learning prototype exploring how wearable signals can be transformed into a cardiovascular-risk screening score.
+A complete educational portfolio system for transforming wearable-style signals into an explainable cardiovascular-risk screening score, with persistence, audit history, testing and safety documentation.
 
-## Features
-- wearable-style inputs: resting heart rate, activity, sleep, age and HR variability
-- transparent preprocessing and feature checks
-- reproducible baseline risk model
-- synthetic sample dataset for demonstration
-- tests, CI, architecture and technical report
+> **Important:** this is not a medical device, does not diagnose heart attacks and must not be used for emergency triage or clinical decisions.
 
-## Architecture
+## What this repository contains
+- wearable feature validation and engineering
+- transparent baseline risk-scoring model
+- synthetic demonstration data
+- SQLite storage for participants, readings, assessments and model versions
+- ER/data-flow diagrams and data dictionary
+- automated model and storage tests
+- CI
+- deployment/runbook notes
+- privacy, clinical-safety and model-card documentation
+- formal technical report
+
+## Workflow
 ```mermaid
 flowchart LR
-  W[Wearable signals] --> V[Validation]
+  W[Wearable reading] --> V[Validation]
   V --> F[Feature engineering]
-  F --> M[Risk model]
-  M --> S[Risk score]
-  S --> E[Explanation]
+  F --> M[Educational risk model]
+  M --> A[Assessment]
+  A --> DB[(SQLite audit store)]
+  DB --> R[Research / review output]
 ```
 
 ## Run
@@ -25,5 +33,13 @@ python demo.py
 python -m unittest discover -s tests -v
 ```
 
-## Safety
-This repository is an educational portfolio prototype. It is not a medical device, does not diagnose heart attacks, and must not be used for clinical decisions or emergency triage.
+## Database
+```bash
+python -c "from src.storage import init_db; init_db('wearable_risk.db', seed=True)"
+```
+
+## Structure
+`src/` model and storage code · `database/` SQL assets · `data/` synthetic samples · `tests/` validation · `docs/` architecture/database/API/testing/deployment/security/model card/report.
+
+## Safety boundary
+No diagnostic accuracy, sensitivity, specificity, clinical validity or regulatory-compliance claim is made. Real medical use would require clinically appropriate datasets, medical oversight, prospective validation, subgroup analysis, privacy controls, human interpretation and regulatory review.
