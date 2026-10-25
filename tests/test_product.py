@@ -15,15 +15,26 @@ class ProductTests(unittest.TestCase):
         payload = response.get_json()
         self.assertIn('trend_aware', payload)
         self.assertEqual(len(payload['series']), 14)
+        self.assertIn('skin_temperature_c', payload['series'][0])
+        self.assertIn('skin_temperature_c', payload['averages'])
 
     def test_trend_aware_score_responds_to_deteriorating_series(self):
         rows = [
-            {'date':f'2026-10-{10+i:02d}','resting_hr':65+i*2,'hrv_ms':65-i*3,'sleep_hours':7.5-i*.2,'steps':9000-i*300,'exercise_minutes':30,'spo2':98}
+            {'date':f'2026-10-{10+i:02d}','resting_hr':65+i*2,'hrv_ms':65-i*3,'sleep_hours':7.5-i*.2,'steps':9000-i*300,'exercise_minutes':30,'spo2':98,'skin_temperature_c':36.4+i*.05}
             for i in range(7)
         ]
         result = analyse_history(45, rows)
         self.assertGreaterEqual(result['trend_aware']['score'], result['baseline']['score'])
         self.assertIn('Resting HR', result['contributions'])
+        self.assertIn('temperature_c_per_day', result['trends'])
+
+    def test_temperature_out_of_range_rejected(self):
+        rows = [
+            {'resting_hr':70,'hrv_ms':50,'sleep_hours':7,'steps':8000,'spo2':98,'skin_temperature_c':45}
+            for _ in range(3)
+        ]
+        with self.assertRaises(ValueError):
+            analyse_history(40, rows)
 
     def test_requires_enough_history(self):
         response = self.client.post('/api/analyse', json={'age':40,'readings':[{'resting_hr':70,'hrv_ms':50,'sleep_hours':7,'steps':8000}]})
