@@ -10,7 +10,7 @@
   <header class="topbar"><div><span class="brand-mark">PL</span><strong>PulseLens</strong></div><span class="tag">Wearable analytics prototype</span></header>
   <main>
     <section class="hero">
-      <div><p class="eyebrow">LONGITUDINAL WELLNESS ANALYTICS</p><h1>Turn wearable signals into an explainable trend view.</h1><p>Explore resting heart rate, HRV, sleep, activity and SpO₂ patterns over time. The system surfaces directional changes and unusual readings without making a diagnosis.</p></div>
+      <div><p class="eyebrow">CARDIOVASCULAR RISK MONITORING FROM WEARABLE SIGNALS</p><h1>Turn wearable signals into an explainable trend view.</h1><p>Explore resting heart rate, HRV, sleep, activity, SpO₂ and skin-temperature patterns over time. The system surfaces directional changes and unusual readings without making a diagnosis.</p></div>
       <div class="notice"><strong>Safety boundary</strong><p>Educational portfolio prototype only. Not a medical device and not for emergency or clinical decisions.</p></div>
     </section>
 
@@ -29,13 +29,13 @@
     </section>
 
     <section class="grid two">
-      <article class="card"><h2>Prototype model comparison</h2><div id="models"></div></article>
+      <article class="card"><h2>Prototype model comparison</h2><div id="models"></div><p class="muted">For research benchmarking with Logistic Regression, Random Forest and XGBoost, see <code>experiments/model_comparison.py</code>.</p></article>
       <article class="card"><h2>Latest score contributions</h2><div id="contrib"></div></article>
     </section>
 
     <section class="grid two">
       <article class="card"><h2>Anomaly watch</h2><div id="anomalies"></div></article>
-      <article class="card"><h2>Daily series</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>RHR</th><th>HRV</th><th>Sleep</th><th>Steps</th><th>SpO₂</th></tr></thead><tbody id="rows"></tbody></table></div></article>
+      <article class="card"><h2>Daily series</h2><div class="table-wrap"><table><thead><tr><th>Date</th><th>RHR</th><th>HRV</th><th>Sleep</th><th>Steps</th><th>SpO₂</th><th>Temp °C</th></tr></thead><tbody id="rows"></tbody></table></div></article>
     </section>
   </main>
   <script src="/static/app.js"></script>
