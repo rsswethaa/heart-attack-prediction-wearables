@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import asdict
 from datetime import date
 from statistics import mean, median
 
@@ -25,9 +24,12 @@ def normalise_reading(row: dict) -> dict:
         "steps": int(_number(row, "steps")),
         "exercise_minutes": int(float(row.get("exercise_minutes", 20))),
         "spo2": float(row.get("spo2", 98.0)),
+        "skin_temperature_c": float(row.get("skin_temperature_c", row.get("temperature_c", 36.5))),
     }
     if not 70 <= reading["spo2"] <= 100:
         raise ValueError("SpO2 out of supported demo range")
+    if not 30 <= reading["skin_temperature_c"] <= 42:
+        raise ValueError("skin temperature out of supported demo range")
     return reading
 
 
@@ -92,6 +94,7 @@ def analyse_history(age: int, rows: list[dict]) -> dict:
     hr_slope = _slope([r["resting_hr"] for r in readings])
     hrv_slope = _slope([r["hrv_ms"] for r in readings])
     sleep_slope = _slope([r["sleep_hours"] for r in readings])
+    temp_slope = _slope([r["skin_temperature_c"] for r in readings])
     trend_adjustment = max(0.0, hr_slope * 1.5) + max(0.0, -hrv_slope * 0.7) + max(0.0, -sleep_slope * 2.0)
     trend_score = min(100.0, round(baseline["score"] + trend_adjustment, 1))
     trend_band = "LOW" if trend_score < 25 else "MODERATE" if trend_score < 50 else "ELEVATED"
@@ -99,12 +102,14 @@ def analyse_history(age: int, rows: list[dict]) -> dict:
     hr_flags = _robust_flags([r["resting_hr"] for r in readings])
     hrv_flags = _robust_flags([r["hrv_ms"] for r in readings])
     spo2_flags = _robust_flags([r["spo2"] for r in readings])
+    temp_flags = _robust_flags([r["skin_temperature_c"] for r in readings])
     anomalies = []
     for i, r in enumerate(readings):
         reasons = []
         if hr_flags[i]: reasons.append("resting HR deviation")
         if hrv_flags[i]: reasons.append("HRV deviation")
         if spo2_flags[i] or r["spo2"] < 94: reasons.append("SpO2 deviation")
+        if temp_flags[i] or r["skin_temperature_c"] > 38.0: reasons.append("temperature deviation")
         if reasons:
             anomalies.append({"date": r["date"], "reasons": reasons})
 
@@ -121,6 +126,7 @@ def analyse_history(age: int, rows: list[dict]) -> dict:
             "resting_hr_per_day": round(hr_slope, 2),
             "hrv_ms_per_day": round(hrv_slope, 2),
             "sleep_hours_per_day": round(sleep_slope, 2),
+            "temperature_c_per_day": round(temp_slope, 3),
         },
         "averages": {
             "resting_hr": round(mean(r["resting_hr"] for r in readings), 1),
@@ -128,6 +134,7 @@ def analyse_history(age: int, rows: list[dict]) -> dict:
             "sleep_hours": round(mean(r["sleep_hours"] for r in readings), 1),
             "steps": round(mean(r["steps"] for r in readings)),
             "spo2": round(mean(r["spo2"] for r in readings), 1),
+            "skin_temperature_c": round(mean(r["skin_temperature_c"] for r in readings), 2),
         },
         "contributions": feature_contributions(int(age), latest),
         "anomalies": anomalies,
